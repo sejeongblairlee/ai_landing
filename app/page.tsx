@@ -3,21 +3,18 @@
 import { useState } from 'react'
 import { Header } from '@/components/header'
 import { TaskInput } from '@/components/task-input'
-import { CategoryStep } from '@/components/category-step'
 import { QuestionStep } from '@/components/question-step'
 import { RecommendationStep } from '@/components/recommendation-step'
 import { SearchLimitModal } from '@/components/search-limit-modal'
 import { useSearchLimit } from '@/hooks/use-search-limit'
-import { Category, CategoryQuestion, AIRecommendation } from '@/lib/types'
+import { CategoryQuestion, AIRecommendation } from '@/lib/types'
 
 type Step = 'input' | 'questions' | 'recommendations'
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState<Step>('input')
   const [task, setTask] = useState('')
-  const [category, setCategory] = useState<Category | null>(null)
   const [questions, setQuestions] = useState<CategoryQuestion[]>([])
-  const [answers, setAnswers] = useState<string[]>([])
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')

@@ -3,7 +3,7 @@ import { createUser } from '@/lib/database'
 import { redirect } from 'next/navigation'
 
 export default async function AuthCallback() {
-  const supabase = createClient()
+  const supabase = await createClient()
   
   const { data: { session }, error } = await supabase.auth.getSession()
   
