@@ -15,6 +15,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<Step>('input')
   const [task, setTask] = useState('')
   const [questions, setQuestions] = useState<CategoryQuestion[]>([])
+  const [answers, setAnswers] = useState<string[]>([])
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
