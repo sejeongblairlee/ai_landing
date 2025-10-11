@@ -28,9 +28,22 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         console.log("TossWidget 초기화 시작:", { clientKey: !!clientKey, origin });
         
         // 동적 import로 TossPayments SDK 로드
-        const { loadTossPayments, ANONYMOUS } = await import("@tosspayments/tosspayments-sdk");
-        const tp = await loadTossPayments(clientKey);
-        const w = tp.widgets({ customerKey: ANONYMOUS });
+        const TossPayments = await import("@tosspayments/tosspayments-sdk");
+        console.log("TossPayments SDK 로드됨:", TossPayments);
+        
+        const tp = await TossPayments.loadTossPayments(clientKey);
+        console.log("TossPayments 인스턴스:", tp);
+        
+        // customerKey 생성 (영문 대소문자, 숫자, 특수문자 포함)
+        const customerKey = `customer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        console.log("customerKey:", customerKey);
+        
+        // widgets 메서드가 있는지 확인
+        if (typeof tp.widgets !== 'function') {
+          throw new Error(`tp.widgets is not a function. Available methods: ${Object.keys(tp)}`);
+        }
+        
+        const w = tp.widgets({ customerKey });
         await w.setAmount({ currency: "USD", value: amount });
         await Promise.all([
           w.renderPaymentMethods({ selector: "#payment-method" }),
