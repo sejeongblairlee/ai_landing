@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     let dailySearchCount = 0
     let isLoggedIn = false
     let isPaid = false
+    let creditCount = 0
     
     if (session?.user) {
       isLoggedIn = true
@@ -21,6 +22,9 @@ export async function GET(request: NextRequest) {
       
       const subscription = await getUserSubscription(session.user.id)
       isPaid = subscription?.is_paid || false
+      
+      // 크레딧 수 조회 (임시로 0으로 설정, 실제로는 DB에서 조회)
+      creditCount = 0
     } else {
       // 비로그인 사용자는 IP 기반으로 제한
       const { count } = await supabase
@@ -33,7 +37,7 @@ export async function GET(request: NextRequest) {
       dailySearchCount = count || 0
     }
     
-    const { remaining, canSearch } = getSearchLimit(isLoggedIn, isPaid, dailySearchCount)
+    const { remaining, canSearch } = getSearchLimit(isLoggedIn, isPaid, dailySearchCount, creditCount)
     
     return NextResponse.json({
       remaining,

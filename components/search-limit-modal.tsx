@@ -36,61 +36,37 @@ export function SearchLimitModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <Card className="w-full max-w-md mx-4 border-0 shadow-2xl bg-white/90 backdrop-blur-sm">
+      <Card className="w-full max-w-md mx-4 border-0 shadow-2xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
         <CardHeader className="text-center pb-6">
-          <CardTitle className="text-2xl font-semibold text-gray-900 tracking-tight">
+          <CardTitle className="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
             {isLoggedIn ? '검색 횟수 초과' : '무료 검색 횟수 초과'}
           </CardTitle>
-          <CardDescription className="text-lg text-gray-600 font-medium">
-            {isLoggedIn 
-              ? '오늘 무료 검색 횟수를 모두 사용했습니다.'
-              : '오늘 무료 검색 횟수를 모두 사용했습니다.'
-            }
+          <CardDescription className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+            오늘 무료 검색 횟수를 모두 사용했습니다.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 px-8 pb-8">
-          {!isLoggedIn ? (
-            <div className="text-center space-y-6">
-              <p className="text-base text-gray-600 font-medium">
-                로그인하면 하루 3회 추가 무료 검색이 가능합니다!
-              </p>
-              <div className="space-y-3">
-                <Link href="/login" onClick={handleLoginSuccess}>
-                  <Button className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                    로그인하기
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  onClick={onClose}
-                  className="w-full h-12 text-lg font-medium rounded-xl border-2"
-                >
-                  나중에 하기
-                </Button>
-              </div>
+          <div className="text-center space-y-6">
+            <p className="text-base text-gray-600 dark:text-gray-400 font-medium">
+              추가 검색을 위해 크레딧을 구매하세요.
+            </p>
+            <div className="space-y-3">
+              <Button
+                onClick={handlePayment}
+                className="w-full h-12 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                style={{ backgroundColor: '#B0FF01', color: '#000000' }}
+              >
+                $3로 15회 추가 검색하기
+              </Button>
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="w-full h-12 text-lg font-medium rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                나중에 하기
+              </Button>
             </div>
-          ) : (
-            <div className="text-center space-y-6">
-              <p className="text-base text-gray-600 font-medium">
-                월 3달러로 무제한 검색이 가능합니다.
-              </p>
-              <div className="space-y-3">
-                <Button
-                  onClick={handlePayment}
-                  className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-                >
-                  월 3달러로 무제한 검색하기
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={onClose}
-                  className="w-full h-12 text-lg font-medium rounded-xl border-2"
-                >
-                  나중에 하기
-                </Button>
-              </div>
-            </div>
-          )}
+          </div>
         </CardContent>
       </Card>
     </div>

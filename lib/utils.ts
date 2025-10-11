@@ -1,11 +1,11 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// IP 주소 추출 함수
+// 클라이언트 IP 주소 가져오기
 export function getClientIP(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
   const realIP = request.headers.get('x-real-ip')
@@ -18,31 +18,33 @@ export function getClientIP(request: Request): string {
     return realIP
   }
   
-  return 'unknown'
+  return '127.0.0.1'
 }
 
 // 한국 시간 기준 날짜 가져오기
 export function getKoreaDate(): string {
   const now = new Date()
   const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)) // UTC+9
-  return koreaTime.toISOString().split('T')[0] // YYYY-MM-DD 형식
+  return koreaTime.toISOString().split('T')[0]
 }
 
-// 검색 횟수 제한 확인
-export function getSearchLimit(
-  isLoggedIn: boolean,
-  isPaid: boolean,
-  dailySearchCount: number
-): { remaining: number; canSearch: boolean } {
+// 검색 제한 로직 (크레딧 기반)
+export function getSearchLimit(isLoggedIn: boolean, isPaid: boolean, dailySearchCount: number, creditCount: number = 0) {
+  // 결제 사용자: 크레딧 기반
   if (isPaid) {
-    return { remaining: Infinity, canSearch: true }
+    return {
+      remaining: creditCount,
+      canSearch: creditCount > 0
+    }
   }
   
-  if (isLoggedIn) {
-    const limit = 5
-    return { remaining: Math.max(0, limit - dailySearchCount), canSearch: dailySearchCount < limit }
-  }
+  // 비로그인 사용자: 하루 3회 제한
+  const maxSearches = 3
+  const remaining = Math.max(0, maxSearches - dailySearchCount)
+  const canSearch = remaining > 0
   
-  const limit = 2
-  return { remaining: Math.max(0, limit - dailySearchCount), canSearch: dailySearchCount < limit }
+  return {
+    remaining,
+    canSearch
+  }
 }

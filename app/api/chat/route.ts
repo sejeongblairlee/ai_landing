@@ -1,12 +1,25 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// 환경 변수 검증
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  console.warn('OPENAI_API_KEY is not set');
+}
+
+const client = apiKey ? new OpenAI({
+  apiKey: apiKey,
+}) : null;
 
 export async function POST(req: Request) {
   try {
+    if (!client) {
+      return NextResponse.json(
+        { error: "OpenAI API key is not configured" },
+        { status: 500 }
+      );
+    }
+
     const { message } = await req.json();
 
     const completion = await client.chat.completions.create({

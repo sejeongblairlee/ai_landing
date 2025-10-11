@@ -20,15 +20,31 @@ export function useSearchLimit() {
     try {
       setLoading(true)
       const response = await fetch('/api/search-limit')
-      const data = await response.json()
       
-      if (response.ok) {
-        setSearchLimit(data)
-      } else {
-        console.error('검색 제한 확인 오류:', data.error)
+      if (!response.ok) {
+        // API 오류 시 기본값 설정
+        setSearchLimit({
+          remaining: 2,
+          canSearch: true,
+          isLoggedIn: false,
+          isPaid: false,
+          dailySearchCount: 0
+        })
+        return
       }
+      
+      const data = await response.json()
+      setSearchLimit(data)
     } catch (error) {
       console.error('검색 제한 확인 오류:', error)
+      // 네트워크 오류 시 기본값 설정
+      setSearchLimit({
+        remaining: 2,
+        canSearch: true,
+        isLoggedIn: false,
+        isPaid: false,
+        dailySearchCount: 0
+      })
     } finally {
       setLoading(false)
     }

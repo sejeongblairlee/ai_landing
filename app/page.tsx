@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Header } from '@/components/header'
+import { Hero } from '@/components/hero'
 import { TaskInput } from '@/components/task-input'
 import { QuestionStep } from '@/components/question-step'
 import { RecommendationStep } from '@/components/recommendation-step'
@@ -22,6 +23,18 @@ export default function Home() {
   
   const { searchLimit, refreshLimit } = useSearchLimit()
   const [showLimitModal, setShowLimitModal] = useState(false)
+
+  // 초기 상태로 리셋하는 함수
+  const resetToInitial = () => {
+    setCurrentStep('input')
+    setTask('')
+    setQuestions([])
+    setAnswers([])
+    setRecommendations([])
+    setLoading(false)
+    setError('')
+    setShowLimitModal(false)
+  }
 
   const handleTaskSubmit = async (taskText: string) => {
     if (!searchLimit?.canSearch) {
@@ -106,19 +119,48 @@ export default function Home() {
   }
 
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white dark:bg-background">
         <Header />
         
-        <main className="max-w-4xl mx-auto px-6 py-12">
+        {/* Hero 섹션 - 초기 랜딩에만 표시 */}
+        {currentStep === 'input' && (
+          <div className="relative">
+            <Hero />
+            
+            {/* TaskInput을 Hero 위에 겹치기 */}
+            <div className="absolute top-0 left-0 w-full z-10">
+              <div className="max-w-4xl mx-auto px-6 pt-40">
+                <div className="max-w-3xl mx-auto">
+                  <TaskInput 
+                    onSubmit={handleTaskSubmit}
+                    loading={loading}
+                    error={error}
+                    remaining={searchLimit?.remaining || 0}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* 검색 후 페이지에서는 일반 레이아웃 */}
+        {currentStep !== 'input' && (
+          <div className="max-w-4xl mx-auto px-6 py-8">
+            <div className="max-w-3xl mx-auto">
+              {currentStep === 'input' && (
+                <TaskInput 
+                  onSubmit={handleTaskSubmit}
+                  loading={loading}
+                  error={error}
+                  remaining={searchLimit?.remaining || 0}
+                />
+              )}
+            </div>
+          </div>
+        )}
+        
+        <main className="max-w-4xl mx-auto px-6 py-8">
           <div className="max-w-3xl mx-auto">
-          {currentStep === 'input' && (
-            <TaskInput 
-              onSubmit={handleTaskSubmit}
-              loading={loading}
-              error={error}
-              remaining={searchLimit?.remaining || 0}
-            />
-          )}
           
             {currentStep === 'questions' && questions.length > 0 && (
             <QuestionStep 

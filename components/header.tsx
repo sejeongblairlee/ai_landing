@@ -24,39 +24,47 @@ export function Header() {
   }
 
   return (
-    <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+    <header className="bg-transparent sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6">
-            <Link href="/" className="text-3xl font-semibold text-gray-900 tracking-tight hover:text-blue-600 transition-colors">
-              Find AI
-            </Link>
-            <div className="hidden sm:block h-6 w-px bg-gray-200"></div>
-            <p className="text-base text-gray-500 hidden sm:block font-medium">
-              AI 툴 추천 서비스
-            </p>
-          </div>
+                  <div className="flex items-center space-x-6">
+                    <Link 
+                      href="/"
+                      className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                    >
+                      Find AI
+                    </Link>
+                  </div>
           
           <div className="flex items-center space-x-4">
+            <Link 
+              href="/pricing"
+              className="text-base text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
+            >
+              Pricing
+            </Link>
             {!loading && (
               <>
                 {user ? (
                   <div className="flex items-center space-x-4">
-                    <div className="text-sm text-gray-600 font-medium">
+                    <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">
                       {user.email}
                     </div>
                     <Button
                       onClick={handleLogout}
                       variant="outline"
-                      className="h-10 px-4 text-sm font-medium rounded-xl border-2 hover:bg-gray-50"
+                      className="h-10 px-4 text-sm font-medium rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       로그아웃
                     </Button>
                   </div>
                 ) : (
                   <Link href="/login">
-                    <Button className="h-10 px-6 text-sm font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                      로그인 / 회원가입
+                    <Button 
+                      className="h-10 px-6 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                      style={{ backgroundColor: '#B0FF01', color: '#000000' }}
+                    >
+                      시작하기
                     </Button>
                   </Link>
                 )}

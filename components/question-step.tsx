@@ -45,19 +45,19 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
   const isLastQuestion = currentQuestion === questions.length - 1
 
   return (
-    <Card className="animate-fade-in border-0 shadow-xl bg-white/70 backdrop-blur-sm">
+    <Card className="animate-fade-in border-0 shadow-xl bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
       <CardHeader className="text-center pb-8">
-        <CardTitle className="text-3xl font-semibold text-gray-900 tracking-tight mb-4">
+        <CardTitle className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight mb-4">
           맞춤형 질문 ({currentQuestion + 1}/{questions.length})
         </CardTitle>
-        <CardDescription className="text-xl text-gray-600 font-medium leading-relaxed">
+        <CardDescription className="text-xl text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
           더 정확한 추천을 위해 몇 가지 질문에 답해주세요.
         </CardDescription>
       </CardHeader>
       
       <CardContent className="px-8 pb-8">
         <div className="space-y-8">
-          <h3 className="text-xl font-semibold text-gray-900 text-center leading-relaxed">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white text-center leading-relaxed">
             {questions[currentQuestion]?.question}
           </h3>
           
@@ -68,8 +68,8 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
                 onClick={() => handleAnswerSelect(option)}
                 className={`w-full p-5 text-left rounded-xl border-2 transition-all duration-200 ${
                   answers[currentQuestion] === option
-                    ? 'border-blue-500 bg-blue-50 text-blue-900 shadow-md'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 shadow-md'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-sm'
                 }`}
                 disabled={loading}
               >
@@ -83,8 +83,8 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-            <p className="text-sm text-red-600 font-medium">{error}</p>
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+            <p className="text-sm text-red-600 dark:text-red-400 font-medium">{error}</p>
           </div>
         )}
 
@@ -93,7 +93,7 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
             onClick={handlePrevious}
             variant="outline"
             disabled={currentQuestion === 0 || loading}
-            className="flex-1 h-14 text-lg font-semibold rounded-xl border-2"
+            className="flex-1 h-14 text-lg font-semibold rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             이전
           </Button>
@@ -101,11 +101,12 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
           <Button
             onClick={handleNext}
             disabled={!isAnswerSelected || loading}
-            className="flex-1 h-14 text-lg font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            className="flex-1 h-14 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            style={{ backgroundColor: '#B0FF01', color: '#000000' }}
           >
             {loading ? (
               <div className="flex items-center space-x-3">
-                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-black border-t-transparent"></div>
                 <span>추천 생성 중...</span>
               </div>
             ) : isLastQuestion ? (
@@ -120,7 +121,7 @@ export function QuestionStep({ questions, onSubmit, loading, error, onRestart }:
           <Button
             onClick={onRestart}
             variant="ghost"
-            className="text-gray-500 hover:text-gray-700 font-medium"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium"
           >
             처음부터 다시 시작
           </Button>

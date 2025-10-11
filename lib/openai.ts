@@ -1,9 +1,15 @@
 import OpenAI from 'openai'
 import { Category, CategoryQuestion, AIRecommendation } from './types'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// 환경 변수 검증
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  console.warn('OPENAI_API_KEY is not set');
+}
+
+const openai = apiKey ? new OpenAI({
+  apiKey: apiKey,
+}) : null;
 
 // 카테고리 판별 프롬프트
 const CATEGORY_PROMPT = `
@@ -97,6 +103,10 @@ const RECOMMENDATION_PROMPT = `
 `
 
 export async function categorizeTask(task: string): Promise<Category> {
+  if (!openai) {
+    throw new Error('OpenAI API key is not configured')
+  }
+  
   console.log('OpenAI API 호출 시도 중...')
   
   const response = await openai.chat.completions.create({
@@ -119,6 +129,10 @@ export async function categorizeTask(task: string): Promise<Category> {
 export async function generateQuestions(
   task: string
 ): Promise<CategoryQuestion[]> {
+  if (!openai) {
+    throw new Error('OpenAI API key is not configured')
+  }
+  
   console.log('질문 생성 OpenAI API 호출 중...')
   
   const response = await openai.chat.completions.create({
@@ -142,6 +156,10 @@ export async function generateRecommendations(
   task: string,
   answers: string[]
 ): Promise<AIRecommendation[]> {
+  if (!openai) {
+    throw new Error('OpenAI API key is not configured')
+  }
+  
   console.log('AI 툴 추천 OpenAI API 호출 중...')
   
   const response = await openai.chat.completions.create({
