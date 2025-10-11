@@ -7,30 +7,72 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
   const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
   const [widgets, setWidgets] = useState<any>(null);
   const [ready, setReady] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const origin = typeof window !== "undefined" ? window.location.origin : "";
 
   useEffect(() => {
-    if (!clientKey || !origin) return;
+    if (!clientKey || !origin) {
+      setError("환경변수 또는 origin이 설정되지 않았습니다.");
+      setLoading(false);
+      return;
+    }
+    
     (async () => {
-      const tp = await loadTossPayments(clientKey);
-      const w = tp.widgets({ customerKey: ANONYMOUS });
-      await w.setAmount({ currency: "USD", value: amount });
-      await Promise.all([
-        w.renderPaymentMethods({ selector: "#payment-method" }),
-        w.renderAgreement({ selector: "#agreement" }),
-      ]);
-      setWidgets(w);
-      setReady(true);
-    })().catch(console.error);
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const tp = await loadTossPayments(clientKey);
+        const w = tp.widgets({ customerKey: ANONYMOUS });
+        await w.setAmount({ currency: "USD", value: amount });
+        await Promise.all([
+          w.renderPaymentMethods({ selector: "#payment-method" }),
+          w.renderAgreement({ selector: "#agreement" }),
+        ]);
+        setWidgets(w);
+        setReady(true);
+      } catch (err) {
+        console.error("TossWidget 초기화 오류:", err);
+        setError("결제 위젯 초기화에 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [clientKey, origin, amount]);
 
-  if (!clientKey) return <p>환경변수 누락: NEXT_PUBLIC_TOSS_CLIENT_KEY</p>;
+  if (!clientKey) {
+    return (
+      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+        <p className="text-sm text-red-600 dark:text-red-400">환경변수 누락: NEXT_PUBLIC_TOSS_CLIENT_KEY</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center space-x-2 p-4">
+        <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>
+        <span className="text-gray-600 dark:text-gray-400">결제 위젯 로딩 중...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="space-y-4">
       <div id="payment-method" />
       <div id="agreement" />
       <button
         disabled={!ready}
+        className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
         onClick={async () => {
           try {
             await widgets.requestPayment({
@@ -45,7 +87,7 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
           }
         }}
       >
-        결제하기
+        {ready ? "결제하기" : "로딩 중..."}
       </button>
     </div>
   );

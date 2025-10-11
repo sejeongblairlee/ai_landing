@@ -58,13 +58,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md border-0 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <CardHeader className="text-center pb-8">
-          <CardTitle className="text-3xl font-semibold text-gray-900 tracking-tight mb-2">
+          <CardTitle className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight mb-2">
             {isSignUp ? '회원가입' : '로그인'}
           </CardTitle>
-          <CardDescription className="text-lg text-gray-600 font-medium">
+          <CardDescription className="text-lg text-gray-600 dark:text-gray-400 font-medium">
             Find AI에 오신 것을 환영합니다
           </CardDescription>
         </CardHeader>
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 text-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
+                className="h-12 text-lg border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
               />
               <Input
                 type="password"
@@ -86,19 +86,19 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-12 text-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
+                className="h-12 text-lg border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
               />
             </div>
             
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-                <p className="text-sm text-red-600 font-medium">{error}</p>
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                <p className="text-sm text-red-600 dark:text-red-400 font-medium">{error}</p>
               </div>
             )}
             
             {success && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                <p className="text-sm text-green-600 font-medium">{success}</p>
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
+                <p className="text-sm text-green-600 dark:text-green-400 font-medium">{success}</p>
               </div>
             )}
             
@@ -121,14 +121,14 @@ export default function LoginPage() {
           <div className="mt-6 text-center space-y-3">
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
             >
               {isSignUp ? '이미 계정이 있으신가요? 로그인' : '계정이 없으신가요? 회원가입'}
             </button>
             <div>
               <Link 
                 href="/"
-                className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+                className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium"
               >
                 ← 홈으로 돌아가기
               </Link>
