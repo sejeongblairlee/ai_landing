@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 
 export default function TossWidget({ amount = 3 }: { amount?: number }) {
   const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
@@ -12,6 +11,9 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
   const origin = typeof window !== "undefined" ? window.location.origin : "";
 
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행
+    if (typeof window === 'undefined') return;
+    
     if (!clientKey || !origin) {
       setError("환경변수 또는 origin이 설정되지 않았습니다.");
       setLoading(false);
@@ -23,6 +25,10 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         setLoading(true);
         setError(null);
         
+        console.log("TossWidget 초기화 시작:", { clientKey: !!clientKey, origin });
+        
+        // 동적 import로 TossPayments SDK 로드
+        const { loadTossPayments, ANONYMOUS } = await import("@tosspayments/tosspayments-sdk");
         const tp = await loadTossPayments(clientKey);
         const w = tp.widgets({ customerKey: ANONYMOUS });
         await w.setAmount({ currency: "USD", value: amount });
@@ -32,9 +38,11 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         ]);
         setWidgets(w);
         setReady(true);
+        
+        console.log("TossWidget 초기화 완료");
       } catch (err) {
         console.error("TossWidget 초기화 오류:", err);
-        setError("결제 위젯 초기화에 실패했습니다.");
+        setError(`결제 위젯 초기화에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
       } finally {
         setLoading(false);
       }
