@@ -91,7 +91,8 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
       
       <button
         disabled={!ready}
-        className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+        className="w-full h-12 text-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+        style={{ backgroundColor: '#B0FF01', color: '#000000' }}
         onClick={async () => {
           try {
             console.log("결제 요청 시작:", { widgets, ready });
