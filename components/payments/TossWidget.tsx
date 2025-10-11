@@ -38,18 +38,9 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         const customerKey = `customer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         console.log("customerKey:", customerKey);
         
-        // widgets 메서드가 있는지 확인
-        if (typeof tp.widgets !== 'function') {
-          throw new Error(`tp.widgets is not a function. Available methods: ${Object.keys(tp)}`);
-        }
-        
-        const w = tp.widgets({ customerKey });
-        await w.setAmount({ currency: "USD", value: amount });
-        await Promise.all([
-          w.renderPaymentMethods({ selector: "#payment-method" }),
-          w.renderAgreement({ selector: "#agreement" }),
-        ]);
-        setWidgets(w);
+        // 최신 TossPayments SDK는 widgets 대신 직접 결제 요청 방식 사용
+        // 위젯 렌더링 대신 결제 버튼만 표시
+        setWidgets(tp);
         setReady(true);
         
         console.log("TossWidget 초기화 완료");
@@ -89,22 +80,32 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
 
   return (
     <div className="space-y-4">
-      <div id="payment-method" />
-      <div id="agreement" />
+      <div className="text-center space-y-2">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Premium 플랜 - ${amount} USD
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-500">
+          15회 추가 검색 크레딧
+        </p>
+      </div>
+      
       <button
         disabled={!ready}
         className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
         onClick={async () => {
           try {
+            console.log("결제 요청 시작:", { widgets, ready });
+            
             await widgets.requestPayment({
               orderId: crypto.randomUUID(),
               orderName: "Find AI Premium ($3)",
+              amount: amount * 100, // 센트 단위로 변환
               successUrl: `${origin}/payments/success`,
               failUrl: `${origin}/payments/fail`,
             });
           } catch (e) {
-            console.error(e);
-            alert("결제 시작 중 오류가 발생했습니다.");
+            console.error("결제 요청 오류:", e);
+            alert(`결제 시작 중 오류가 발생했습니다: ${e instanceof Error ? e.message : '알 수 없는 오류'}`);
           }
         }}
       >
