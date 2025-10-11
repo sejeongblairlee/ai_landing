@@ -31,15 +31,16 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         const TossPayments = await import("@tosspayments/tosspayments-sdk");
         console.log("TossPayments SDK 로드됨:", TossPayments);
         
-        const tp = await TossPayments.loadTossPayments(clientKey);
+        // 올바른 방식으로 TossPayments 초기화
+        const tp = TossPayments.default(clientKey);
         console.log("TossPayments 인스턴스:", tp);
+        console.log("사용 가능한 메서드:", Object.keys(tp));
         
-        // customerKey 생성 (영문 대소문자, 숫자, 특수문자 포함)
-        const customerKey = `customer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        console.log("customerKey:", customerKey);
+        // requestPayment 메서드가 있는지 확인
+        if (typeof tp.requestPayment !== 'function') {
+          throw new Error(`tp.requestPayment is not a function. Available methods: ${Object.keys(tp)}`);
+        }
         
-        // 최신 TossPayments SDK는 widgets 대신 직접 결제 요청 방식 사용
-        // 위젯 렌더링 대신 결제 버튼만 표시
         setWidgets(tp);
         setReady(true);
         
@@ -97,7 +98,7 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
           try {
             console.log("결제 요청 시작:", { widgets, ready });
             
-            await widgets.requestPayment({
+            await widgets.requestPayment('카드', {
               orderId: crypto.randomUUID(),
               orderName: "Find AI Premium ($3)",
               amount: amount * 100, // 센트 단위로 변환
