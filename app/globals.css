@@ -182,7 +182,8 @@ button:hover {
   background-color: rgba(0, 0, 0, 0.03) !important;
 }
 
-/* primary 색상 버튼의 hover 효과 */
+/* primary 색상 버튼의 hover 효과 - 검은색 3% 오버레이 */
 button[style*="background-color: #B0FF01"]:hover {
-  background-color: rgba(176, 255, 1, 0.97) !important;
+  background-color: #B0FF01 !important;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.03) !important;
 }
