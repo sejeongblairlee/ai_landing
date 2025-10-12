@@ -8,6 +8,7 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [exchangeRate, setExchangeRate] = useState<number>(1300); // 기본 환율
   const origin = typeof window !== "undefined" ? window.location.origin : "";
 
   useEffect(() => {
@@ -26,6 +27,17 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         setError(null);
         
         console.log("TossWidget 초기화 시작:", { clientKey: !!clientKey, origin });
+        
+        // 환율 조회
+        try {
+          const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+          const data = await response.json();
+          const rate = data.rates.KRW || 1300;
+          setExchangeRate(rate);
+          console.log('현재 환율 (USD to KRW):', rate);
+        } catch (err) {
+          console.warn('환율 API 호출 실패, 기본값 사용:', err);
+        }
         
         // 스크립트 태그로 TossPayments SDK 로드
         const script = document.createElement('script');
@@ -98,10 +110,10 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
     <div className="space-y-4">
       <div className="text-center space-y-2">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Premium 플랜 - ${amount} USD
+          Premium 플랜 - ₩{Math.round(amount * exchangeRate).toLocaleString()}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-500">
-          15회 추가 검색 크레딧
+          15회 추가 검색 크레딧 • 환율: 1 USD = ₩{exchangeRate.toLocaleString()}
         </p>
       </div>
       
@@ -113,10 +125,13 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
           try {
             console.log("결제 요청 시작:", { widgets, ready });
             
+            const amountInKRW = Math.round(amount * exchangeRate);
+            console.log('결제 금액:', { USD: amount, KRW: amountInKRW, exchangeRate });
+            
             await widgets.requestPayment('카드', {
               orderId: crypto.randomUUID(),
               orderName: "Find AI Premium ($3)",
-              amount: amount * 100, // 센트 단위로 변환
+              amount: amountInKRW, // 원화 금액
               successUrl: `${origin}/payments/success`,
               failUrl: `${origin}/payments/fail`,
             });
