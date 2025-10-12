@@ -182,20 +182,7 @@ button:hover {
   background-color: rgba(0, 0, 0, 0.03) !important;
 }
 
-/* primary 색상 버튼의 hover 효과 - 검은색 3% 오버레이 */
+/* primary 색상 버튼의 hover 효과 */
 button[style*="background-color: #B0FF01"]:hover {
-  background-color: #B0FF01 !important;
-  position: relative !important;
-}
-
-button[style*="background-color: #B0FF01"]:hover::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background-color: rgba(0, 0, 0, 0.03) !important;
-  border-radius: inherit !important;
-  pointer-events: none !important;
+  background-color: #A7F201 !important;
 }
