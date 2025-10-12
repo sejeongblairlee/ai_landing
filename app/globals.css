@@ -177,8 +177,8 @@ body {
   }
 }
 
-/* 버튼 hover 효과 - 모든 버튼에 적용 */
-button:hover {
+/* 버튼 hover 효과 - 일반 버튼에만 적용 */
+button:hover:not([style*="background-color: #B0FF01"]) {
   background-color: rgba(0, 0, 0, 0.03) !important;
 }
 
