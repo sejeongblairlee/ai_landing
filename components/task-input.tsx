@@ -25,7 +25,7 @@ export function TaskInput({ onSubmit, loading, error, remaining }: TaskInputProp
     <div className="relative animate-fade-in">
       {/* 입력 영역 */}
       <div className="text-center mb-6">
-        <h1 className="text-[48px] leading-[64px] font-bold text-gray-900 dark:text-white tracking-tight mb-4">
+        <h1 className="text-[32px] md:text-[48px] leading-[40px] md:leading-[64px] font-bold text-gray-900 dark:text-white tracking-tight mb-4">
           어떤 작업을<br className="md:hidden" /> 도와드릴까요?
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed">

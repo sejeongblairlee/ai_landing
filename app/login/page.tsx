@@ -105,7 +105,8 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full h-12 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              style={{ backgroundColor: '#B0FF01', color: '#000000' }}
             >
               {loading ? (
                 <div className="flex items-center space-x-3">

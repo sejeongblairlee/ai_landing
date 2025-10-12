@@ -176,3 +176,13 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* 버튼 hover 효과 - 모든 버튼에 적용 */
+button:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* primary 색상 버튼의 hover 효과 */
+button[style*="background-color: #B0FF01"]:hover {
+  background-color: rgba(176, 255, 1, 0.97) !important;
+}
