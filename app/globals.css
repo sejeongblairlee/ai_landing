@@ -182,7 +182,29 @@ button:hover:not([style*="background-color: #B0FF01"]) {
   background-color: rgba(0, 0, 0, 0.03) !important;
 }
 
-/* primary 색상 버튼의 hover 효과 */
-button[style*="background-color: #B0FF01"]:hover {
+/* primary 색상 버튼의 hover 효과 - 더 구체적인 선택자 사용 */
+button[style*="background-color: #B0FF01"]:hover,
+button[style*="background-color: #B0FF01"]:focus,
+button[style*="background-color: #B0FF01"]:active {
   background-color: #A7F201 !important;
+  background: #A7F201 !important;
+}
+
+/* 모든 버튼의 기본 hover 효과 제거 */
+button[style*="background-color: #B0FF01"] {
+  transition: background-color 0.2s ease !important;
+}
+
+/* Button 컴포넌트 기본 스타일 오버라이드 */
+button.bg-blue-600:hover,
+button.hover\:bg-blue-700:hover,
+.inline-flex.bg-blue-600:hover,
+.inline-flex.hover\:bg-blue-700:hover {
+  background-color: #A7F201 !important;
+  background: #A7F201 !important;
+}
+
+/* 모든 primary 버튼에 대한 강제 오버라이드 */
+button[style*="background-color: #B0FF01"]:hover * {
+  background-color: transparent !important;
 }
