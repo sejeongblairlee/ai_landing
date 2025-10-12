@@ -64,7 +64,7 @@ export function TaskInput({ onSubmit, loading, error, remaining }: TaskInputProp
               <span>AI가 분석 중입니다...</span>
             </div>
           ) : (
-            'AI 툴 추천받기'
+            '내게 맞는 AI 추천받기'
           )}
         </Button>
         
