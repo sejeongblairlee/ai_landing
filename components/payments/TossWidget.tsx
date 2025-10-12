@@ -31,41 +31,36 @@ export default function TossWidget({ amount = 3 }: { amount?: number }) {
         const script = document.createElement('script');
         script.src = 'https://js.tosspayments.com/v1';
         
-        return new Promise((resolve, reject) => {
-          script.onload = () => {
-            try {
-              // @ts-ignore
-              const tp = window.TossPayments(clientKey);
-              console.log("TossPayments 인스턴스:", tp);
-              console.log("사용 가능한 메서드:", Object.keys(tp));
-              
-              // requestPayment 메서드가 있는지 확인
-              if (typeof tp.requestPayment !== 'function') {
-                throw new Error(`tp.requestPayment is not a function. Available methods: ${Object.keys(tp)}`);
-              }
-              
-              setWidgets(tp);
-              setReady(true);
-              console.log("TossWidget 초기화 완료");
-              resolve(tp);
-            } catch (err) {
-              console.error("TossWidget 초기화 오류:", err);
-              setError(`결제 위젯 초기화에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
-              setLoading(false);
-              reject(err);
+        script.onload = () => {
+          try {
+            // @ts-ignore
+            const tp = window.TossPayments(clientKey);
+            console.log("TossPayments 인스턴스:", tp);
+            console.log("사용 가능한 메서드:", Object.keys(tp));
+            
+            // requestPayment 메서드가 있는지 확인
+            if (typeof tp.requestPayment !== 'function') {
+              throw new Error(`tp.requestPayment is not a function. Available methods: ${Object.keys(tp)}`);
             }
-          };
-          
-          script.onerror = () => {
-            const err = new Error("TossPayments SDK 로드 실패");
-            console.error("TossWidget 초기화 오류:", err);
-            setError("결제 위젯 초기화에 실패했습니다: SDK 로드 실패");
+            
+            setWidgets(tp);
+            setReady(true);
             setLoading(false);
-            reject(err);
-          };
-          
-          document.head.appendChild(script);
-        });
+            console.log("TossWidget 초기화 완료");
+          } catch (err) {
+            console.error("TossWidget 초기화 오류:", err);
+            setError(`결제 위젯 초기화에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+            setLoading(false);
+          }
+        };
+        
+        script.onerror = () => {
+          console.error("TossPayments SDK 로드 실패");
+          setError("결제 위젯 초기화에 실패했습니다: SDK 로드 실패");
+          setLoading(false);
+        };
+        
+        document.head.appendChild(script);
       } catch (err) {
         console.error("TossWidget 초기화 오류:", err);
         setError(`결제 위젯 초기화에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
