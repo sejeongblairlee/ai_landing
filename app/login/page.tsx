@@ -62,10 +62,10 @@ export default function LoginPage() {
       <Card className="w-full max-w-md border-0 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <CardHeader className="text-center pb-8">
           <CardTitle className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight mb-2">
-            {isSignUp ? '회원가입' : '로그인'}
+            {isSignUp ? '메일 계정을 입력해주세요' : '로그인'}
           </CardTitle>
           <CardDescription className="text-lg text-gray-600 dark:text-gray-400 font-medium">
-            Find AI에 오신 것을 환영합니다
+            {isSignUp ? '입력한 계정으로 인증 메일이 전송됩니다' : 'Find AI에 오신 것을 환영합니다'}
           </CardDescription>
         </CardHeader>
         
